@@ -369,5 +369,5 @@ resultsRMSE %>% knitr::kable()
 
 
 
-
+summarise(edx)
 

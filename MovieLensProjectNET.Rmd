@@ -5,7 +5,7 @@ date: "27/11/2020"
 output: pdf_document
 ---
 
-## Project Overview
+# Project Overview
 
 This is the project for HarvardX PH125.9x Data Science: Capstone submission.
 The project makes use of the MovieLens 10M dataset supplied by HarvardX which is downloaded from "http://files.grouplens.org/datasets/movielens/ml-10m.zip". The project initially starts with a brief overview of the goals of the project followed by a setup and a preperation of the MovieLens 10M dataset. 
@@ -13,7 +13,7 @@ An data analysis will be displayed and carried out on the dataset, as to create 
 The results will be analysed and explain. Finally the project will conclude with a brief study the projects achievements and thoughts of where future improvemts could be made.
 
 
-## Introduction
+# Introduction
 
 The creation of a movie recommedation system using the 10M version of MovieLens dataset will be the main focus of this project. The success of the movie recommedation system will be measured by the Root Mean Square Error [RMSE] value scored by the method/algorithm. A RMSE value of less than 0.86549 will be seen as a success.
 
@@ -23,7 +23,7 @@ Similarly to how Amazon can predict what items their users will like so can be d
 
 Thus this project will focus on creating a movie recommendation system for the 10M version of MovieLens dataset.
 
-## Aim of Project
+# Aim of Project
 
 The project aims to train a moive predictiting algorithm (machine learning algorithm), that can accurately predict a users rating (between 0.5 to 5 stars) of a movie. The algorithm will be trained using the provided edx dataset which is a subset of the 10M version of MovieLens dataset. The algorithm's predicting ability will be assesed by testing its ablility to predict movie rating in the provided validation set. 
 
@@ -36,8 +36,8 @@ The function that computes the RMSE for vectors of movie ratings and their corre
 $$ RMSE = \sqrt{\frac{1}{N}\displaystyle\sum_{u,i} (\hat{y}_{u,i}-y_{u,i})^{2}} $$
 ## Dataset Initialisation 
 
+The code below is provided in the HarvardX PH125.9x Data Science: Capstone project module [Create Train and Validation Sets]: https://learning.edx.org/course/course-v1:HarvardX+PH125.9x+2T2020/block-v1:HarvardX+PH125.9x+2T2020+type@sequential+block@e8800e37aa444297a3a2f35bf84ce452/block-v1:HarvardX+PH125.9x+2T2020+type@vertical+block@e9abcdd945b1416098a15fc95807b5db
 
-The code is provided in the HarvardX PH125.9x Data Science: Capstone project module [Create Train and Validation Sets]: https://learning.edx.org/course/course-v1:HarvardX+PH125.9x+2T2020/block-v1:HarvardX+PH125.9x+2T2020+type@sequential+block@e8800e37aa444297a3a2f35bf84ce452/block-v1:HarvardX+PH125.9x+2T2020+type@vertical+block@e9abcdd945b1416098a15fc95807b5db
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE}
 ##########################################################
@@ -61,11 +61,11 @@ library(ggplot2)
 library(lubridate)
 
 # ##Downloading dataset and setting up training and testing sets according to EDX given instructions
-# 
+ 
 # # MovieLens 10M dataset:
 # # https://grouplens.org/datasets/movielens/10m/
 # # http://files.grouplens.org/datasets/movielens/ml-10m.zip
-# 
+ 
 dl <- tempfile()
 download.file("http://files.grouplens.org/datasets/movielens/ml-10m.zip", dl)
 
@@ -111,9 +111,9 @@ removed <- anti_join(temp, validation)
 edx <- rbind(edx, removed)
 rm(dl, ratings, movies, test_index, temp, movielens, removed)
 ```
-## Summary Data about the edx data frame (MovieLens data)
 
-## Data Analysis
+
+# Data Analysis
 
 Once the edx subset has been cleaned, it is good practice to view the subset features and calculate basic summary statistics. 
 
@@ -121,21 +121,22 @@ Once the edx subset has been cleaned, it is good practice to view the subset fea
 # intial 7 rows with header
 head(edx)
 ```
+
 ```{r, echo = TRUE}
 #basic summary 
-summarise(edx)
+summary(edx)
 ```
 
 From these we can see the subset is in a tidy formate and is therefore ready for exploration and analysis 
 
 ## Quiz: MovieLens Dataset
 
-#Q1
+### Q1
 ```{r, echo = TRUE, message=FALSE}
 #number rows & number cols
 dim(edx)
 ```
-#Q2
+### Q2
 ```{r, echo = TRUE, message=FALSE}
 #num zeros
 print("Number of Zeros")
@@ -145,25 +146,27 @@ print("Number of Threes")
 #num threes
 sum(edx$rating == 3)
 ```
-#Q3
+### Q3
 ```{r, echo = TRUE, message=FALSE}
 #number movies
 
 numberMovies <- edx %>% group_by(movieId) %>% summarise(numberRatings = n())
 nrow(numberMovies)
 ```
-#Q4
+### Q4
 ```{r, echo = TRUE, message=FALSE}
 #number users
 
 numberUsers <- edx %>% group_by(userId) %>% summarise(numberRatings = n())
 nrow(numberUsers)
 ```
-#Q5
+
+### Q5
+
 ```{r, echo = TRUE, message=FALSE}
 # need to split up genres in edx first (problems with " |  ")
 #call
-#edxSplitGenre <-  edx  %>% separate_rows(genres, sep = "\\|")
+edxSplitGenre <-  edx  %>% separate_rows(genres, sep = "\\|")
 
 #number ratings per genre -- > use edx spited by genre 
 
@@ -171,8 +174,10 @@ rateGenre <- edxSplitGenre %>% group_by(genres) %>% summarise(count  = n())%>%
   arrange(desc(count))
 rateGenre
 ```
-#Q6
-```{r echo=TRUE, message=FALSE}
+
+### Q6
+
+```{r,echo=TRUE, message=FALSE}
 #highest rated movie
 
 ratingMovies <- edx %>% group_by(movieId) %>% 
@@ -184,8 +189,9 @@ ratingMovies
 #can see pulp is at the top 
 ```
 
-#Q7
-```{r echo=TRUE, message=FALSE}
+### Q7
+
+```{r, echo=TRUE, message=FALSE}
 #most given rating
 givenRating <- edx %>% group_by(rating) %>% summarise(num = n()) %>% 
   arrange(desc(num))
@@ -202,9 +208,10 @@ edx %>%
           numberMovies = n_distinct(movieId)) 
 ```
 
-# Looking a movies and their ratings
+### Looking a movies and their ratings
 
-# Graph of ratings per moiveID/Title
+### Graph of ratings per moiveID/Title
+
 ```{r, echo = FALSE}
 
 numberMovies %>% ggplot(aes(movieId,numberRatings)) + 
@@ -212,6 +219,7 @@ numberMovies %>% ggplot(aes(movieId,numberRatings)) +
   coord_flip() + 
   ggtitle("Number of Ratings per MovieId")
 ```
+
 Can be seen that some movies have more ratings than others but this graph is not that usefull otherwise.
 
 graph below shows the number of ratings for top 10 movies for interest sake (and viewing summary data)
@@ -222,7 +230,7 @@ ratingMovies %>% ggplot(aes(title , numRatings)) +
   ggtitle("Top 10 Movies and Number Ratings")
 ```
 
-# Graph of movie rating distribution
+### Graph of movie rating distribution
 
 Information that would be more usefull to understand the edx subset and about the rating of the movies would be about how the number of ratings are distrubuted this can be seen in the graph bellow:
 
@@ -232,6 +240,7 @@ numberMovies %>%
   scale_x_log10() + 
   ggtitle("Number of Movie Ratings")
 ```
+
 The graph above shows that some movies have been rated more times than others this creates a bais towards these movies. A regularisation and penalty term will need to be added to models as the reduce error caused due to the movies that have rarerly been rated.
 
 From the previous graph it can be seen that there are a number of movies that have only been rated once these movies could, as previously learnt in the course, cause making predictions on ratings inaccurate the following movies displaced below are the singular rated movies - There are 126 of these movies only 10 of these movies are displayed in descending ratings.
@@ -249,7 +258,7 @@ edx %>%
   knitr::kable()
 ```
 
-# View of Users in the edx substet
+## View of Users in the edx subset
 
 Shown below is a graph of the distribution of number of ratings given by users. What can be observed is that the majority of users only rate between 40 and 100 movies. Also evident from the graph is that some users are more active than others. These two observations show that a user bais needs to be taken into account when making predictions.
 
@@ -264,7 +273,7 @@ numberUsers %>%
 
 As seen in graph below users tend to rate movies generally higher stars than lower stars, this is evident as the rating of 4 is most common followed by 3 and 5. Also evident in the graph is that users tend to give mover full stars rating compared to half stars as can been seen that .5 ratings are less common and full star ratings.
 
-```{r echo=FALSE, message = FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 givenRating %>% ggplot(aes(rating,num)) +
   geom_bar(stat="identity") + 
   scale_x_discrete(limits = c(seq(0.5,5,0.5))) +
@@ -274,7 +283,7 @@ givenRating %>% ggplot(aes(rating,num)) +
   
 Some users also tend to be more particular with their rating than other users. This can be viewed in the graph below and can be seen that some users give movies a low rating where as others give high ratings. There are also users having rated a hundred or more movies these are used to construct the graph below, this is done as to show there is a trend with the high and low ratings.
 
-```{r, echo = FALSE, message =  FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 edx %>%
   group_by(userId) %>%
   filter(n() >= 100) %>%
@@ -287,12 +296,13 @@ edx %>%
   scale_x_discrete(limits = c(seq(0.5,5,0.5))) 
 ```
 
-# Age of Movies and User rating trend
+## Age of Movies and User rating trend
 
 A brief look at how users ratings change over the years that movies have been released. As observed below there seems to be a trend that indicates that more recent (or younger users, from 1950 till present) tend to rate movies more strictly (lower star rating) than their older counterpart
 
-```{r, echo = FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 # need to change the time stamp into years
+
 edxWithYear <- edx %>% mutate(year = as.numeric(str_sub(title,-5,-2)))
 
 edxWithYear %>% group_by(year) %>%
@@ -302,7 +312,7 @@ edxWithYear %>% group_by(year) %>%
 ```
 
 
-## MODELLING APPROACH 
+# MODELLING APPROACH 
 
 Begin with computing the RMSE, which is the loss-function for this model.
 ```{r, echo = TRUE}
@@ -339,10 +349,11 @@ resultsRMSE <- data_frame(method = "Mean Only ", RMSE = baselineRMSE)
 resultsRMSE
 ```
 
-## MOVIE Effect Model
+## Movie Effect Model
+
 This is an attempt to improve on the previous model but incorporating the movie effect into a new model. When making use of the movie effect model, we must take head of the penalty term (b_i) - movie effect. Thus looking at the graph below it can be noted that different movies are rated differently. As seen by the histogram not being symmetric and is skewed toward a negative rating effect. The movie effect can be accounted for by computing the difference from the mean rating.
 
-```{r, echo = TRUE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 movieAvg <- edx %>% 
   group_by(movieId) %>% 
   summarize(b_i = mean(rating - mu))
@@ -351,7 +362,7 @@ movieAvg %>% qplot(b_i, geom ="histogram", bins = 20, data = ., color = I("black
 
 The improvement to the prediction using this model can be viewed below
 
-```{r, echo = TRUE}
+```{r,echo=TRUE, message=FALSE, warning=FALSE}
 predRating <- validation %>% 
   left_join(movieAvg, by="movieId") %>%
   mutate(pred = mu + b_i)
@@ -369,7 +380,7 @@ The Error has dropped by 0.1172931 which indicated that the prediction methods a
 As seen previously different Users rate movies different to others. There are some users that rate critically with low rating, other that rate movies optimistically with high rating and lastly there are users that does care.
 This behavior is categorized as the penalty term (b_u) User Effect
 
-```{r, echo = TRUE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 userAvg <- edx %>% 
   left_join(movieAvg, by='movieId') %>%
   group_by(userId) %>%
@@ -395,11 +406,12 @@ As both the movie and user baises obscure the prediction of a movie rating an im
 The RMSE has decreased further which is good.
  
 ## Regularisation of Movie and User Effect Model
+
 As noted in the Visualisation/data exploration section, some users rate far more than other users and other users that rated very few movies. The user effect combined with some movies being rates very few times, such as only 1 time (there are 126 movies with a single user rating), this makes the predictions noisy and untrustworthy. Therefore a regularisation is used to create a penalty term to gives lessens importance of the effect that increases the error, thus reducing RMSE.
 
-A value of lambda should be found that will minimise RMSE.
+A value of lambda that will minimise RMSE must be found.
 
-```{r, echo = TRUE}
+```{r, echo= FALSE, message=FALSE, warning=FALSE}
 lambda <- seq(0,10,0.25)
 
 rmses <- sapply(lambda, function(l){
@@ -424,18 +436,20 @@ rmses <- sapply(lambda, function(l){
 })
 ```
 
-Find optimal lambda from Graph below
-```{r, echo = TRUE}
-qplot(lambda, rmses)
+Find optimal lambda from Graph below:
 
+```{r, echo= TRUE, message=FALSE, warning=FALSE}
+qplot(lambda, rmses)
+```
+```{r, echo=TRUE , message=FALSE, warning=FALSE}
 bestLambda <- lambda[which.min(rmses)]
 bestLambda
 
 ```
 
-Use lambda = for final model 
+Use lambda = 5.25 for final model 
 
-# Final model results are below
+### Final model results are below
 
 ```{r, echo = TRUE}
 resultsRMSE <- bind_rows(resultsRMSE, data_frame(method = " Regularisation of Movie and User Effect Model", RMSE = min(rmses) ))
@@ -443,7 +457,7 @@ resultsRMSE <- bind_rows(resultsRMSE, data_frame(method = " Regularisation of Mo
 resultsRMSE %>% knitr::kable()
 ```
 
-## Results
+# Results
 
 The results from the models are as follows :
 
@@ -453,19 +467,12 @@ resultsRMSE %>% knitr::kable()
 
 The lowest RMSE is 0.8650484 and this is achieved by the regularisation of Movie and User Effect Model
 
-## CONCLUSION
+# CONCLUSION
 
 The RMSE table shows that there was a continued improvement from model to models as new penalty terms where added. The Mean Only calculated a RMSE of greater than 1, indicating a high error in prediction that was over a single star, which is terrible. There was significant improvement with the implementations of the Movie Effect Method and Movie and User Effect Model, these reduced the RMSE to 0.9439087 and 0.8653488 respectively. Finally the Regularisation of Movie and User Effect Model reduces the RMSE to 0.8650484 which is within the acceptable goal for this project and one can somewhat trust the prediction. 
 
-## Idea's for Future Improvement
+# Idea's for Future Improvement
 
 It can be noted that future improvement to the RMSE could be achieve by including other effects such as genre, year, and movie age to a model. One could also try other machine learning techniques such as perhaps a neural network to better predict a movie rating.
 
-## References
 
-@book{Data Science,
-  author =        {Rafael A. Irizarry},
-  title =         {{Introduction to Data Science Data Analysis and Prediction Algorithms with R}},
-  year =          {2020-11-16},
-  url =           {https://rafalab.github.io/dsbook/},
-}
